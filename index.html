@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Art Class Finder</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
+</head>
+<body class="bg-white text-gray-800">
+<div class="min-h-screen p-6">
+  <div class="max-w-3xl mx-auto text-center mb-10">
+    <h1 class="text-4xl font-bold mb-4">Find Local Art Classes</h1>
+    <p class="text-lg text-gray-600 mb-6">Browse real-time availability for workshops near you</p>
+    <div class="flex items-center justify-center gap-2">
+      <input id="searchInput" type="text" placeholder="Search for classes..." class="w-2/3 border border-gray-300 rounded px-3 py-2" />
+      <button id="searchBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Search</button>
+    </div>
+  </div>
+
+  <div id="results" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto"></div>
+
+  <div class="fixed bottom-6 right-6">
+    <button class="rounded-full px-4 py-2 shadow-lg bg-blue-600 text-white hover:bg-blue-700">Live Chat</button>
+  </div>
+</div>
+
+<script>
+  const mockClasses = [
+    { id: 1, name: "Watercolor Basics", location: "Downtown Studio", available: true },
+    { id: 2, name: "Figure Drawing", location: "East Side Loft", available: false },
+    { id: 3, name: "Oil Painting Advanced", location: "West End Gallery", available: true },
+  ];
+
+  const resultsContainer = document.getElementById("results");
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+
+  function displayResults(data) {
+    resultsContainer.innerHTML = "";
+    data.forEach((cls, index) => {
+      const card = document.createElement("div");
+      card.className = "rounded-2xl shadow-md hover:shadow-xl transition duration-300 bg-white p-4";
+      card.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.1}s`;
+
+      card.innerHTML = `
+          <h2 class="text-xl font-semibold mb-1">${cls.name}</h2>
+          <p class="text-gray-500 mb-2">${cls.location}</p>
+          <p class="font-medium ${cls.available ? 'text-green-600' : 'text-red-500'}">
+            ${cls.available ? 'Spots Available' : 'Fully Booked'}
+          </p>
+        `;
+      resultsContainer.appendChild(card);
+    });
+  }
+
+  searchBtn.addEventListener("click", () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered = mockClasses.filter(c => c.name.toLowerCase().includes(query));
+    displayResults(filtered);
+  });
+
+  displayResults(mockClasses);
+</script>
+
+<style>
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</body>
+</html>
